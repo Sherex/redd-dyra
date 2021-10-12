@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="background" />
+    <Background />
     <div class="flex-column">
       <div class="flex-row">
         <div>
@@ -20,11 +20,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import SearchBox from '../components/Search-Box.vue'
+import Background from '../components/Background.vue'
 
 export default defineComponent({
   name: 'Home',
   components: {
-    SearchBox
+    SearchBox,
+    Background
   }
 })
 </script>
@@ -42,18 +44,6 @@ export default defineComponent({
   justify-content: center;
   align-items: center;
   padding: 30px 0;
-}
-
-#background {
-  background: url('/img/cat-wallpaper.jpg') no-repeat;
-  background-position: -520px 0px;
-  filter: blur(10px);
-  height: 100%;
-  width: 100%;
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  z-index: -1;
 }
 
 #logo-text {
