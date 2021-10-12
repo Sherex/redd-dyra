@@ -1,17 +1,9 @@
 <template>
-  <div class="Search-Box">
-    <!-- <van-search
-      id="searchField"
-      v-model="searchText"
-      placeholder="Søk på navn, ID, fosterhjem.."
-      shape="round"
-      background="#FFFFFF00"
-    /> -->
-    <van-field
-      v-model="message"
-      label=""
-      placeholder="Søk på navn, ID, fosterhjem.."
-    />
+  <div>
+    <div id="parent">
+      <input id="search-field" type="search" placeholder="Søk på navn, ID, fosterhjem.." v-model="searchText">
+      <!-- TODO: Search icon -->
+    </div>
   </div>
 </template>
 
@@ -26,8 +18,18 @@ export default defineComponent({
 })
 </script>
 
-<style>
-#searchField {
-  color: rgba(0, 0, 0, 128);
+<style scoped>
+#parent {
+  display: flex;
+  background-color: rgba(255, 255, 255, 0.75);
+  border-radius: 20px;
+}
+
+#search-field {
+  background-color: rgba(0, 0, 0, 0);
+  outline: none;
+  border: none;
+  width: 100%;
+  padding: 10px 20px;
 }
 </style>

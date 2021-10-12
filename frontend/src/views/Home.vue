@@ -1,19 +1,19 @@
 <template>
   <div>
-    <div class="background" />
-    <van-row justify="center">
-      <van-col span="4" class="logo">
-        <img alt="Redd-dyra logo" src="../assets/redd-dyra-logo.png">
-      </van-col>
-      <van-col span="16" class="logo">
-        <h1>REDD DYRA</h1>
-      </van-col>
-    </van-row>
-    <van-row justify="center">
-      <van-col span="18" class="logo">
-        <Search-Box />
-      </van-col>
-    </van-row>
+    <div id="background" />
+    <div class="flex-column">
+      <div class="flex-row">
+        <div>
+          <img alt="Redd-dyra logo" src="../assets/redd-dyra-logo.png">
+        </div>
+        <h1 id="logo-text">
+          REDD DYRA
+        </h1>
+      </div>
+      <div class="flex-row">
+        <Search-Box id="search-box" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -30,7 +30,21 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.background {
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 0;
+}
+
+#background {
   background: url('/img/cat-wallpaper.jpg') no-repeat;
   background-position: -520px 0px;
   filter: blur(10px);
@@ -41,11 +55,14 @@ export default defineComponent({
   left: 0px;
   z-index: -1;
 }
-.logo {
-  font-size: 1.3em;
-  text-align: center;
+
+#logo-text {
+  font-size: 2em;
+  font-weight: bold;
+  color: #B61B29;
 }
-.logo img {
-  padding-top: 16px; /* TODO: Is there a way to calculate this? */
+
+#search-box {
+  width: 80%
 }
 </style>
