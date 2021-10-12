@@ -1,0 +1,9 @@
+{
+  "name": "redd-dyra",
+  "private": "true",
+  "scripts": {
+    "dev:b": "(cd backend && npm run dev)",
+    "dev:f": "(cd frontend && npm run serve)",
+    "dev": "npm run dev:b & npm run dev:f"
+  }
+}
