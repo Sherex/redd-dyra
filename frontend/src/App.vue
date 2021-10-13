@@ -9,4 +9,8 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.icon {
+  font-size: 32px;
+  color: black;
+}
 </style>

@@ -2,16 +2,20 @@
   <div>
     <div id="parent">
       <input id="search-field" type="search" placeholder="Søk på navn, ID, fosterhjem.." v-model="searchText">
-      <!-- TODO: Search icon -->
+      <Magnify class="icon" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { Magnify } from 'mdue'
 
 export default defineComponent({
   name: 'SearchBox',
+  components: {
+    Magnify
+  },
   data: () => ({
     searchText: ''
   })
@@ -23,6 +27,7 @@ export default defineComponent({
   display: flex;
   background-color: rgba(255, 255, 255, 0.75);
   border-radius: 20px;
+  align-items: center;
 }
 
 #search-field {
@@ -31,5 +36,9 @@ export default defineComponent({
   border: none;
   width: 100%;
   padding: 10px 20px;
+}
+
+.icon {
+  padding: 0 10px;
 }
 </style>

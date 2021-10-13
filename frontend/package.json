@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "mdue": "^0.1.4",
     "pinia": "^2.0.0-rc.4",
     "register-service-worker": "^1.7.1",
     "vue": "^3.0.0",
