@@ -35,10 +35,10 @@ export default defineComponent({
   outline: none;
   border: none;
   width: 100%;
-  padding: 10px 20px;
+  padding: 10px 0px 10px 15px;
 }
 
 .icon {
-  padding: 0 10px;
+  padding: 0px 10px 0px 5px;
 }
 </style>
