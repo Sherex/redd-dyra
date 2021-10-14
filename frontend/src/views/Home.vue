@@ -35,6 +35,7 @@ export default defineComponent({
 .flex-column {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .flex-row {
@@ -43,16 +44,19 @@ export default defineComponent({
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 30px 0;
+  padding-top: 30px;
 }
 
 #logo-text {
-  font-size: 2em;
+  font-size: 2.5em;
   font-weight: bold;
   color: #B61B29;
+  margin: 0;
+  padding-left: 10px;
 }
 
 #search-box {
-  width: 80%
+  width: 80%;
+  max-width: 400px;
 }
 </style>
