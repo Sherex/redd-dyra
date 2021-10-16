@@ -60,21 +60,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.flex-column {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.flex-row {
-  width: 85%;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding-top: 30px;
-}
-
 .logo-row {
   width: 90%
 }
