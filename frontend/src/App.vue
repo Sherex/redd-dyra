@@ -1,6 +1,21 @@
 <template>
-  <router-view/>
+  <div>
+    <Background />
+    <router-view/>
+  </div>
 </template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+import Background from './components/Background.vue'
+
+export default defineComponent({
+  name: 'App',
+  components: {
+    Background
+  }
+})
+</script>
 
 <style>
 #app {

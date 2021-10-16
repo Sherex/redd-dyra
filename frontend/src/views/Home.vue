@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Background />
     <div class="flex-column">
       <div class="flex-row logo-row">
         <div>
@@ -27,13 +26,11 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import SearchBox from '../components/Search-Box.vue'
-import Background from '../components/Background.vue'
 
 export default defineComponent({
   name: 'Home',
   components: {
-    SearchBox,
-    Background
+    SearchBox
   },
   data: () => ({
     cards: [
