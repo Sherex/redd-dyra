@@ -1,10 +1,8 @@
 <template>
-  <div>
-    <div id="parent">
-      <ViewDashboardOutline id="dashboard-icon" class="icon"  v-if="currentRoute !== '/'" @click="routeToDashboard" />
-      <input id="search-field" type="search" placeholder="Søk på navn, ID, fosterhjem.." v-model="searchText">
-      <Magnify id="search-icon" class="icon" />
-    </div>
+  <div class="search-parent">
+    <ViewDashboardOutline id="dashboard-icon" class="icon"  v-if="currentRoute !== '/'" @click="routeToDashboard" />
+    <input id="search-field" type="search" placeholder="Søk på navn, ID, fosterhjem.." v-model="searchText">
+    <Magnify id="search-icon" class="icon" />
   </div>
 </template>
 
@@ -36,7 +34,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-#parent {
+.search-parent {
   display: flex;
   background-color: rgba(255, 255, 255, 0.75);
   border-radius: 20px;

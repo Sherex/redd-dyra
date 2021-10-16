@@ -1,23 +1,21 @@
 <template>
-  <div>
-    <div class="flex-column">
-      <div class="flex-row logo-row">
-        <div>
-          <img alt="Redd-dyra logo" src="../assets/redd-dyra-logo.png">
-        </div>
-        <h1 id="logo-text">
-          REDD DYRA
-        </h1>
+  <div class="flex-column">
+    <div class="flex-row logo-row">
+      <div>
+        <img alt="Redd-dyra logo" src="../assets/redd-dyra-logo.png">
       </div>
-      <div class="flex-row">
-        <Search-Box id="search-box" />
-      </div>
-      <div class="flex-row card-row">
-        <div class="card" v-for="card in cards" :key="card.title">
-          <img class="card-icon" alt="House icon" :src="card.icon">
-          <span class="card-title">{{card.title}}</span>
-          <span class="card-status">{{card.status}}</span>
-        </div>
+      <h1 id="logo-text">
+        REDD DYRA
+      </h1>
+    </div>
+    <div class="flex-row">
+      <Search-Box id="search-box" />
+    </div>
+    <div class="flex-row card-row">
+      <div class="card" v-for="card in cards" :key="card.title">
+        <img class="card-icon" alt="House icon" :src="card.icon">
+        <span class="card-title">{{card.title}}</span>
+        <span class="card-status">{{card.status}}</span>
       </div>
     </div>
   </div>
