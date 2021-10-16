@@ -9,7 +9,7 @@
       </h1>
     </div>
     <div class="flex-row">
-      <Search-Box id="search-box" />
+      <Search-Box />
     </div>
     <div class="flex-row card-row">
       <div class="card" v-for="card in cards" :key="card.title">
@@ -101,10 +101,5 @@ export default defineComponent({
   color: #B61B29;
   margin: 0;
   padding-left: 10px;
-}
-
-#search-box {
-  width: 100%;
-  max-width: 400px;
 }
 </style>

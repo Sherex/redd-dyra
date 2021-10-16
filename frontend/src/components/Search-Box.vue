@@ -39,6 +39,8 @@ export default defineComponent({
   background-color: rgba(255, 255, 255, 0.75);
   border-radius: 20px;
   align-items: center;
+  width: 100%;
+  max-width: 400px;
 }
 
 #search-field {
