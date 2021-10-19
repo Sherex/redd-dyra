@@ -1,0 +1,9 @@
+{
+  "__docs__": "https://github.com/googleapis/release-please/blob/main/docs/manifest-releaser.md#configfile",
+  "bootstrap-sha": "b806222b575110abf81a99d9b47d861d1b5de798",
+  "bump-minor-pre-major": true,
+  "bump-patch-for-minor-pre-major": true,
+  "packages": {
+    "frontend": {}
+  }
+}
