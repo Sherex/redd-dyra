@@ -4,8 +4,16 @@ on:
       - main
 name: release-please
 jobs:
+  commitlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: wagoid/commitlint-github-action@v4
   release-please:
     runs-on: ubuntu-latest
+    needs: [commitlint]
     steps:
       - uses: Sherex/release-please-action@v2
         with:
