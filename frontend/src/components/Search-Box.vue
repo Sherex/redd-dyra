@@ -1,28 +1,41 @@
 <template>
-  <div class="search-parent">
-    <Home id="home-icon" class="icon"  v-if="currentRoute !== '/'" @click="routeToDashboard" />
-    <input id="search-field" type="search" placeholder="Søk på navn, ID, fosterhjem.." v-model="searchText">
-    <Magnify id="search-icon" class="icon" />
+  <div class="searchbox-parent">
+    <div class="search-parent" :class="{ 'border-bottom': showQrReader }">
+      <Home id="home-icon" class="icon"  v-if="currentRoute !== '/'" @click="routeToDashboard" />
+      <input id="search-field" type="search" placeholder="Søk på navn, ID, fosterhjem.." v-model="searchText">
+      <QrcodeScan id="qr-icon" class="icon" @click="toggleQrReader" />
+      <Magnify id="search-icon" class="icon" />
+    </div>
+    <div v-if="showQrReader" class="qr-dropdown">
+      <QrReader />
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { Magnify, Home } from 'mdue'
+import { Magnify, Home, QrcodeScan } from 'mdue'
 import router from '../router'
+import QrReader from './Qr-Reader.vue'
 
 export default defineComponent({
   name: 'SearchBox',
   components: {
     Magnify,
-    Home
+    Home,
+    QrcodeScan,
+    QrReader
   },
   data: () => ({
-    searchText: ''
+    searchText: '',
+    showQrReader: false
   }),
   methods: {
     routeToDashboard: () => {
       router.push('/')
+    },
+    toggleQrReader: function () {
+      this.showQrReader = !this.showQrReader
     }
   },
   computed: {
@@ -34,13 +47,30 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.search-parent {
+.searchbox-parent {
   display: flex;
+  flex-direction: column;
   background-color: rgba(255, 255, 255, 0.75);
   border-radius: 20px;
   align-items: center;
   width: 100%;
   max-width: 400px;
+}
+
+.search-parent {
+  display: flex;
+  border-radius: 20px;
+  align-items: center;
+  width: 100%;
+}
+
+.border-bottom {
+  border-bottom: black solid 1px;
+}
+
+.qr-dropdown {
+  padding: 0px 20px 20px 20px;
+  border-radius: 0px 0px 20px 20px;
 }
 
 #search-field {
@@ -58,6 +88,10 @@ export default defineComponent({
 
 #search-icon {
   padding: 0px 10px 0px 5px;
+}
+
+#qr-icon {
+  padding: 0px 0px 0px 5px;
 }
 
 #home-icon {
