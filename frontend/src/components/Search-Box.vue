@@ -1,6 +1,6 @@
 <template>
   <div class="search-parent">
-    <ViewDashboardOutline id="dashboard-icon" class="icon"  v-if="currentRoute !== '/'" @click="routeToDashboard" />
+    <Home id="home-icon" class="icon"  v-if="currentRoute !== '/'" @click="routeToDashboard" />
     <input id="search-field" type="search" placeholder="Søk på navn, ID, fosterhjem.." v-model="searchText">
     <Magnify id="search-icon" class="icon" />
   </div>
@@ -8,14 +8,14 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { Magnify, ViewDashboardOutline } from 'mdue'
+import { Magnify, Home } from 'mdue'
 import router from '../router'
 
 export default defineComponent({
   name: 'SearchBox',
   components: {
     Magnify,
-    ViewDashboardOutline
+    Home
   },
   data: () => ({
     searchText: ''
@@ -51,7 +51,7 @@ export default defineComponent({
   padding: 10px 0px 10px 15px;
 }
 
-#dashboard-icon + #search-field {
+#home-icon + #search-field {
   border-left: #7E7E7E 1px solid;
   padding-left: 5px;
 }
@@ -60,7 +60,7 @@ export default defineComponent({
   padding: 0px 10px 0px 5px;
 }
 
-#dashboard-icon {
+#home-icon {
   padding: 0px 5px 0px 10px;
 }
 </style>
