@@ -6,10 +6,11 @@
     camera="auto"
     :class="{ hidden: hideCamera || qrLoading || qrError }"
   />
-  <div v-if="qrError" class="message">
-    {{qrErrorMessage || qrError}}
+  <div v-if="hideCamera || qrLoading || qrError" class="loading-box">
+    <div v-if="qrError && !hideCamera" class="message">
+      {{qrErrorMessage || qrError}}
+    </div>
   </div>
-  <div v-else-if="hideCamera || qrLoading" class="loading-box" />
 </template>
 
 <script lang="ts">
@@ -109,8 +110,11 @@ export default defineComponent({
 }
 
 .message {
-  font-size: 0.8em;
-  padding: 5px;
+  height: 100%;
+  color: white;
+  text-align: center;
+  font-size: 0.9em;
+  padding: 10px 5px;
 }
 
 .loading-box {
