@@ -14,7 +14,9 @@ export default defineComponent({
 <style scoped>
 #background {
   background: url('/img/cat-wallpaper.jpg') no-repeat;
-  background-position: -520px 0px;
+  background-position: center;
+  background-size: cover;
+  scale: 1.1; /* Hide blur edges */
   filter: blur(10px);
   height: 100%;
   width: 100%;
