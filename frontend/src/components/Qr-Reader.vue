@@ -4,14 +4,12 @@
     @init="onInit"
     @decode="onDecode"
     camera="auto"
-    :class="{ hidden: qrLoading || qrError }"
+    :class="{ hidden: hideCamera || qrLoading || qrError }"
   />
   <div v-if="qrError" class="message">
     {{qrErrorMessage || qrError}}
   </div>
-  <div v-else-if="qrLoading" class="message">
-   Laster kamera..
-  </div>
+  <div v-else-if="hideCamera || qrLoading" class="loading-box" />
 </template>
 
 <script lang="ts">
@@ -29,6 +27,9 @@ export default defineComponent({
   name: 'QrReader',
   components: {
     QrcodeStream
+  },
+  props: {
+    hideCamera: Boolean
   },
   data: (): QrReaderData => ({
     qrError: undefined,
@@ -110,6 +111,12 @@ export default defineComponent({
 .message {
   font-size: 0.8em;
   padding: 5px;
+}
+
+.loading-box {
+  height: 100%;
+  background-color: black;
+  border-radius: inherit;
 }
 
 #qrcode-stream {
