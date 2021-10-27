@@ -1,5 +1,5 @@
 <template>
-  <div class="searchbox-parent">
+  <div class="searchbox-parent" :class="{ 'searchbox-parent-expanded': showQrReader }">
     <div class="search-parent" :class="{ 'border-bottom': showQrReader }">
       <Home id="home-icon" class="icon"  v-if="currentRoute !== '/'" @click="routeToDashboard" />
       <input id="search-field" type="search" placeholder="Søk på navn, ID, fosterhjem.." v-model="searchText">
@@ -55,13 +55,21 @@ export default defineComponent({
   align-items: center;
   width: 100%;
   max-width: 400px;
+  height: 40px;
+  transition: height 0.2s;
 }
 
 .search-parent {
   display: flex;
   border-radius: 20px;
   align-items: center;
+  height: 100%;
   width: 100%;
+  max-height: 40px;
+}
+
+.searchbox-parent-expanded {
+  height: 250px;
 }
 
 .border-bottom {
@@ -69,6 +77,7 @@ export default defineComponent({
 }
 
 .qr-dropdown {
+  height: 100%;
   padding: 0px 20px 20px 20px;
   border-radius: 0px 0px 20px 20px;
 }
