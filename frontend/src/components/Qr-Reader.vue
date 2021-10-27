@@ -62,25 +62,37 @@ export default defineComponent({
 
         this.qrError = error
 
-        if (error.name === 'NotAllowedError') {
-          // user denied camera access permisson
-          // TODO: Check what has to be done on a PWA app if permission is denied
-          this.qrErrorMessage = 'Du må trykke på "tillat" eller "allow" når appen spør om tilgang til kameraet. Prøv å åpne appen på nytt.'
-        } else if (error.name === 'NotFoundError') {
-          // no suitable camera device installed
-          this.qrErrorMessage = 'Fant ingen kameraer på enheten.'
-        } else if (error.name === 'NotSupportedError' || error.name === 'InsecureContextError') {
-          // page is not served over HTTPS (or localhost)
-          this.qrErrorMessage = 'Siden er ikke lastet inn med HTTPS.'
-        } else if (error.name === 'NotReadableError') {
-          // maybe camera is already in use
-          this.qrErrorMessage = 'Er kameraet i bruk av en annen app i bakgrunnen?.'
-        } else if (error.name === 'OverconstrainedError') {
-          // did you requested the front camera although there is none?
-          this.qrErrorMessage = 'Kameraet støtter ikke kriteriene til appen.'
-        } else if (error.name === 'StreamApiNotSupportedError') {
-          // browser seems to be lacking features
-          this.qrErrorMessage = 'Denne enheten støtter dessverre ikke denne funskjonen.'
+        switch (error.name) {
+          case 'NotAllowedError':
+            // User denied camera access permisson
+            // TODO: Check what has to be done on a PWA app if permission is denied
+            this.qrErrorMessage = 'Du må trykke på "tillat" eller "allow" når appen spør om tilgang til kameraet. Prøv å åpne appen på nytt.'
+            break
+
+          case 'NotFoundError':
+            // No suitable camera device installed
+            this.qrErrorMessage = 'Fant ingen kameraer på enheten.'
+            break
+
+          case 'NotSupportedError' || 'InsecureContextError':
+            // Page is not served over HTTPS (or localhost)
+            this.qrErrorMessage = 'Siden er ikke lastet inn med HTTPS.'
+            break
+
+          case 'NotReadableError':
+            // Maybe camera is already in use
+            this.qrErrorMessage = 'Er kameraet i bruk av en annen app i bakgrunnen?.'
+            break
+
+          case 'OverconstrainedError':
+            // The specified criterias could not be fulfilled (camera direction, resolution, etc.)
+            this.qrErrorMessage = 'Kameraet støtter ikke kriteriene til appen.'
+            break
+
+          case 'StreamApiNotSupportedError':
+            // Browser seems to be lacking features
+            this.qrErrorMessage = 'Denne enheten støtter dessverre ikke kamera funskjonen.'
+            break
         }
       } finally {
         this.qrLoading = false
