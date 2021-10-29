@@ -44,4 +44,9 @@ export default defineComponent({
   font-size: 32px;
   color: black;
 }
+
+.white-bg-round {
+  background-color: rgba(255, 255, 255, 0.75);
+  border-radius: 20px;
+}
 </style>

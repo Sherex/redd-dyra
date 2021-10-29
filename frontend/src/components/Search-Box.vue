@@ -1,5 +1,5 @@
 <template>
-  <div class="searchbox-parent" :class="{ 'searchbox-parent-expanded': expandSearchBox }">
+  <div class="white-bg-round searchbox-parent" :class="{ 'searchbox-parent-expanded': expandSearchBox }">
     <div class="search-parent" :class="{ 'border-bottom': showQrReader }">
       <Home id="home-icon" class="icon"  v-if="currentRoute !== '/'" @click="routeToDashboard" />
       <input id="search-field" type="search" placeholder="Søk på navn, ID, fosterhjem.." v-model="searchText">
@@ -58,8 +58,6 @@ export default defineComponent({
 .searchbox-parent {
   display: flex;
   flex-direction: column;
-  background-color: rgba(255, 255, 255, 0.75);
-  border-radius: 20px;
   align-items: center;
   width: 100%;
   max-width: 400px;
