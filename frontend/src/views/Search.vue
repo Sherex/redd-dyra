@@ -14,7 +14,7 @@
           <div class="flex-row stats-row">
             <!-- TODO: Stat key and value should be separated and all values should line up -->
             <div class="stats">
-              Alder: {{cat.stats.birthdate.split('T')[0]}}<br>
+              Alder: {{dateToHuman(new Date(cat.stats.birthdate))}}<br>
               Chip: {{cat.stats.chipped ? 'Ja' : 'Nei'}}<br>
               Vaksinert: {{cat.stats.vaccinated ? 'Ja' : 'Nei'}}
             </div>
@@ -33,6 +33,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import SearchBox from '../components/Search-Box.vue'
+import { dateToHuman } from '../lib/date-to-human'
 
 interface CatSearchResult {
   id: number;
@@ -52,6 +53,7 @@ interface CatSearchResult {
 }
 
 interface SearchData {
+  dateToHuman: typeof dateToHuman
   searchResults: CatSearchResult[]
 }
 
@@ -65,6 +67,7 @@ export default defineComponent({
     if (cats.ok) this.$data.searchResults = await cats.json() as CatSearchResult[]
   },
   data: (): SearchData => ({
+    dateToHuman,
     searchResults: []
   })
 })
