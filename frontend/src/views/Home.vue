@@ -21,40 +21,33 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 import SearchBox from '../components/Search-Box.vue'
 
-export default defineComponent({
-  name: 'Home',
-  components: {
-    SearchBox
+const cards = ref([
+  {
+    title: 'Kattehuset',
+    icon: '/img/home/house-icon.png',
+    status: '>🏠 2 | 🏥 1 | 🏠 4'
   },
-  data: () => ({
-    cards: [
-      {
-        title: 'Kattehuset',
-        icon: '/img/home/house-icon.png',
-        status: '>🏠 2 | 🏥 1 | 🏠 4'
-      },
-      {
-        title: 'Dagslogger',
-        icon: '/img/home/note-icon.png',
-        status: 'Dagens er påbegynt'
-      },
-      {
-        title: 'Oppgaver',
-        icon: '/img/home/checklist-icon.png',
-        status: '4 oppgaver gjenstår'
-      },
-      {
-        title: 'Arbeidsvakter',
-        icon: '/img/home/clock-icon.png',
-        status: '2 dager ubemannet'
-      }
-    ]
-  })
-})
+  {
+    title: 'Dagslogger',
+    icon: '/img/home/note-icon.png',
+    status: 'Dagens er påbegynt'
+  },
+  {
+    title: 'Oppgaver',
+    icon: '/img/home/checklist-icon.png',
+    status: '4 oppgaver gjenstår'
+  },
+  {
+    title: 'Arbeidsvakter',
+    icon: '/img/home/clock-icon.png',
+    status: '2 dager ubemannet'
+  }
+])
+
 </script>
 
 <style scoped>

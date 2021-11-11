@@ -12,45 +12,31 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import { Magnify, Home, QrcodeScan } from 'mdue'
 import router from '../router'
 import QrReader from './Qr-Reader.vue'
 
-export default defineComponent({
-  name: 'SearchBox',
-  components: {
-    Magnify,
-    Home,
-    QrcodeScan,
-    QrReader
-  },
-  data: () => ({
-    searchText: '',
-    showQrReader: false,
-    expandSearchBox: false
-  }),
-  methods: {
-    routeToDashboard: () => {
-      router.push('/')
-    },
-    toggleQrReader: function () {
-      if (!this.showQrReader) this.showQrReader = true
-      this.expandSearchBox = !this.expandSearchBox
-    }
-  },
-  computed: {
-    currentRoute: () => {
-      return router.currentRoute.value.path
-    }
-  },
-  mounted () {
-    const searchBox = document.getElementsByClassName('searchbox-parent')[0]
-    searchBox.addEventListener('transitionend', () => {
-      if (!this.expandSearchBox) this.showQrReader = false
-    }, true)
-  }
+const searchText = ref('')
+const showQrReader = ref(false)
+const expandSearchBox = ref(false)
+const currentRoute = router.currentRoute.value.path
+
+function routeToDashboard () {
+  router.push('/')
+}
+
+function toggleQrReader () {
+  if (!showQrReader.value) showQrReader.value = true
+  expandSearchBox.value = !expandSearchBox.value
+}
+
+onMounted(() => {
+  const searchBox = document.getElementsByClassName('searchbox-parent')[0]
+  searchBox.addEventListener('transitionend', () => {
+    if (!expandSearchBox.value) showQrReader.value = false
+  }, true)
 })
 </script>
 

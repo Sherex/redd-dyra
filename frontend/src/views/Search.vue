@@ -30,8 +30,9 @@
     </div>
   </div>
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue'
+
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import SearchBox from '../components/Search-Box.vue'
 import { dateToHuman } from '../lib/date-to-human'
 
@@ -52,24 +53,11 @@ interface CatSearchResult {
   };
 }
 
-interface SearchData {
-  dateToHuman: typeof dateToHuman
-  searchResults: CatSearchResult[]
-}
+const searchResults = ref<CatSearchResult[]>([])
 
-export default defineComponent({
-  name: 'Search',
-  components: {
-    SearchBox
-  },
-  async mounted () {
-    const cats = await fetch('/mocking/mocked-cats.json')
-    if (cats.ok) this.$data.searchResults = await cats.json() as CatSearchResult[]
-  },
-  data: (): SearchData => ({
-    dateToHuman,
-    searchResults: []
-  })
+onMounted(async () => {
+  const cats = await fetch('/mocking/mocked-cats.json')
+  if (cats.ok) searchResults.value = await cats.json() as CatSearchResult[]
 })
 </script>
 

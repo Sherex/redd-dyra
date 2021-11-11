@@ -2,13 +2,8 @@
   <div id="background" />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 // TODO: Load images dynamically and eventually use selected (color, "cleaness") images from gallery
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  name: 'Background'
-})
 </script>
 
 <style scoped>
