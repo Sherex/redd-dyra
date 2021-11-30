@@ -14,9 +14,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, defineProps } from 'vue'
 import { QrcodeStream } from 'vue-qrcode-reader'
 import { log } from '../lib/logger'
+
+const props = defineProps({
+  hideCamera: {
+    type: Boolean,
+    default: false
+  }
+})
 
 const qrError = ref<undefined | Error>(undefined)
 const qrErrorMessage = ref('')
