@@ -1,10 +1,1 @@
-import { defineStore } from 'pinia'
-
-export const useMainStore = defineStore('main', {
-  state: () => ({
-  }),
-  getters: {
-  },
-  actions: {
-  }
-})
+export * from './search'
