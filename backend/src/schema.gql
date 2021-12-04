@@ -3,7 +3,16 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type Mutation {
+  signUp(name: String!, password: String!, username: String!): User!
+}
+
 type Query {
+  users(name: String): [User!]!
+}
+
+"""Information about a user"""
+type User {
   id: Float!
   name: String!
   username: String!

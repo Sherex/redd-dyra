@@ -1,7 +1,19 @@
-import { ObjectType, Field, Resolver, Query } from 'type-graphql'
+import {
+  ObjectType,
+  Field,
+  Resolver,
+  ResolverInterface,
+  Query,
+  Mutation,
+  ArgsType,
+  Args,
+  Arg
+} from 'type-graphql'
+import * as db from '../db'
 
 @ObjectType({ description: 'Information about a user' })
-class User {
+export class User {
+  // TODO: Use an opaque ID? (tablename + ID? or handlerID + ID (separate logic from data)?)
   @Field()
   id: number
 
@@ -12,18 +24,26 @@ class User {
   name: string
 }
 
-@Resolver(User)
+@ArgsType()
+class SignUpArgs {
+  @Field()
+  username: string
+  @Field()
+  name: string
+  @Field()
+  password: string
+}
+@Resolver()
 export class UserResolver {
-  @Query()
-  id(): number {
-    return 0
+  @Query(returns => [User])
+  users(
+    @Arg('name', { nullable: true }) name?: string
+  ): Promise<User[]> {
+    return db.getUsers({ name })
   }
-  @Query()
-  username(): string {
-    return 'test'
-  }
-  @Query()
-  name(): string {
-    return 'Test Testy'
+
+  @Mutation(returns => User)
+  async signUp(@Args() userArgs: SignUpArgs) {
+    return await db.createUser(userArgs)
   }
 }
