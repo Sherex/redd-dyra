@@ -1,7 +1,7 @@
 <template>
   <div class="white-bg-round searchbox-parent" :class="{ 'searchbox-parent-expanded': expandSearchBox }">
     <div class="search-parent" :class="{ 'border-bottom': showQrReader }">
-      <Home id="home-icon" class="icon"  v-if="currentRoute !== '/'" @click="routeToDashboard" />
+      <Home id="home-icon" class="icon"  v-if="currentRoute.name !== 'home'" @click="routeToDashboard" />
       <input id="search-field" type="search" placeholder="Søk på navn, ID, fosterhjem.." v-model="searchStore.searchText">
       <CloseCircleOutline class="icon" v-if="searchStore.searchText !== ''" @click="searchStore.searchText = ''" />
       <QrcodeScan id="qr-icon" class="icon" v-else @click="toggleQrReader" />
@@ -25,7 +25,7 @@ const searchStore = useSearchStore()
 
 const showQrReader = ref(false)
 const expandSearchBox = ref(false)
-const currentRoute = router.currentRoute.value.path
+const currentRoute = router.currentRoute.value
 
 function routeToDashboard () {
   router.push('/')
@@ -43,33 +43,33 @@ onMounted(() => {
   }, true)
 })
 
-// Can be here, because there is no need to update lastUrl if there is no search-box.
-searchStore.setLastUrl(currentRoute)
-
-if (currentRoute === '/search') {
+if (currentRoute.name === 'search') {
   // If there are multiple of the same query parameter, their values will be represented as an array. This keeps just the first one.
-  let query = router.currentRoute.value.query.query
+  let query = currentRoute.query.query
   if (Array.isArray(query)) query = query[0]
   searchStore.searchText = query?.toString() ?? ''
+} else {
+  // Can be here, because there is no need to update lastUrl if there is no search-box.
+  searchStore.lastUrl = currentRoute.path
 }
 
 watchPostEffect(() => {
   if (searchStore.searchText === searchStore.lastSearchText) return
   searchStore.lastSearchText = searchStore.searchText
 
-  if (searchStore.searchText === '' && currentRoute === '/search') router.push(searchStore.lastUrl)
-  else if (searchStore.searchText !== '' && currentRoute === '/search') updateUrlQuery(searchStore.searchText)
-  else if (searchStore.searchText !== '' && currentRoute !== '/search') updateUrlQuery(searchStore.searchText, { action: 'push', path: '/search' })
+  if (searchStore.searchText === '' && currentRoute.name === 'search') router.push(searchStore.lastUrl)
+  else if (searchStore.searchText !== '' && currentRoute.name === 'search') updateUrlQuery(searchStore.searchText)
+  else if (searchStore.searchText !== '' && currentRoute.name !== 'search') updateUrlQuery(searchStore.searchText, { action: 'push', path: '/search' })
 })
 
 onMounted(() => {
   const searchField = document.getElementById('search-field')
   if (searchField === null) return
-  if (currentRoute === '/search' || searchStore.isFocused) searchField.focus()
+  if (currentRoute.name === 'search' || searchStore.isFocused) searchField.focus()
 
   searchField.onfocus = () => {
     searchStore.isFocused = true
-    if (currentRoute === '/search' || searchStore.searchText === '') return
+    if (currentRoute.name === 'search' || searchStore.searchText === '') return
     updateUrlQuery(searchStore.searchText, { path: '/search', action: 'push' })
   }
 

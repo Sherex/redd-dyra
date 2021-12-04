@@ -5,12 +5,12 @@ import Search from '../views/Search.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home
   },
   {
     path: '/search',
-    name: 'Search',
+    name: 'search',
     component: Search
   }
 ]
