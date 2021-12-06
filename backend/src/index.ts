@@ -3,6 +3,7 @@ import { buildSchema } from 'type-graphql'
 import path from 'path'
 import { ApolloServer } from "apollo-server"
 import { UserResolver } from './schema/user'
+import { createContext } from './schema/context'
 
 (async () => {
 const schema = await buildSchema({
@@ -11,7 +12,8 @@ const schema = await buildSchema({
 });
 
 const server = new ApolloServer({
-  schema
+  schema,
+  context: createContext
 });
 
 const { url } = await server.listen(4000);

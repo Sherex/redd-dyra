@@ -8,7 +8,8 @@ type Mutation {
 }
 
 type Query {
-  users(name: String): [User!]!
+  me: User!
+  users(emails: [String!], ids: [Int!], name: String): [User!]!
 }
 
 """Information about a user"""
