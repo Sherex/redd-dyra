@@ -18,7 +18,7 @@ export class User {
   id: number
 
   @Field()
-  username: string
+  email: string
 
   @Field()
   name: string
@@ -27,7 +27,7 @@ export class User {
 @ArgsType()
 class SignUpArgs {
   @Field()
-  username: string
+  email: string
   @Field()
   name: string
   @Field()

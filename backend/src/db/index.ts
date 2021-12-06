@@ -12,7 +12,7 @@ const userTable: UserTableType[] = []
 // MOCK END
 
 
-export interface CreateUserOptions extends Pick<User, 'username' | 'name'> {
+export interface CreateUserOptions extends Pick<User, 'email' | 'name'> {
   password: string
 }
 
@@ -20,7 +20,7 @@ export async function createUser (user: CreateUserOptions) {
   const passwordHash = await bcrypt.hash(user.password, config.password.saltRounds)
   const newUser = {
     id: newUserId++,
-    username: user.username,
+    email: user.email,
     name: user.name,
     passwordHash
   }
@@ -29,7 +29,7 @@ export async function createUser (user: CreateUserOptions) {
 
   return {
     id: newUser.id,
-    username: newUser.username,
+    email: newUser.email,
     name: newUser.name
   }
 }
@@ -46,7 +46,7 @@ export async function getUsers (options?: GetUsersOptions) {
 
   return users.map(user => ({
     id: user.id,
-    username: user.username,
+    email: user.email,
     name: user.name
   }))
 }
