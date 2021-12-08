@@ -2,6 +2,7 @@
 node_modules
 /dist
 
+/docker/volumes
 
 # local env files
 .env.local
