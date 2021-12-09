@@ -1,14 +1,22 @@
 import bcrypt from 'bcrypt'
 import { config } from '../config'
-import { User, UsersArgs, SignUpArgs } from '../schema/user'
+import { delay } from '../lib/utils'
+import { User, UsersArgs, SignUpArgs, SignInArgs, UserSession } from '../schema/user'
 
 export interface UserTableType extends User {
   passwordHash: string
 }
 
+export interface SessionTableType extends Omit<UserSession, 'user'> {
+  userId: number
+  token: string
+}
+
 // DB TEMP MOCK
 let newUserId = 0
+let newUserSessionId = 0
 const userTable: UserTableType[] = []
+const sessionTable: SessionTableType[] = []
 // MOCK END
 
 export async function createUser (user: SignUpArgs) {
@@ -50,4 +58,31 @@ export async function getUsers (filter?: UsersArgs) {
     email: user.email,
     name: user.name
   }))
+}
+
+interface CreateSessionOptions {
+  deviceType?: string
+}
+
+export async function createSession (user: SignInArgs, options?: CreateSessionOptions) {  
+  const currentUser = userTable.find(dbUser => dbUser.email === user.email)
+
+  if (!currentUser) throw new Error('Incorrect email or password')
+  if (!(await bcrypt.compare(user.password, currentUser.passwordHash))) throw new Error('Incorrect email or password')
+
+  const token = Math.random().toString(36).substr(2, 5)
+
+  const newSession: SessionTableType = {
+    id: newUserSessionId++,
+    userId: currentUser.id,
+    createdAt: Date.now(),
+    expiresAt: Date.now() + 300,
+    deviceType: options?.deviceType,
+    token
+  }
+  sessionTable.push(newSession)
+
+  await delay(Math.random() * 300)
+
+  return newSession
 }

@@ -3,6 +3,8 @@ import {
   Field,
   Resolver,
   ResolverInterface,
+  FieldResolver,
+  Root,
   Query,
   Mutation,
   ArgsType,
@@ -27,6 +29,25 @@ export class User {
   name: string
 }
 
+@ObjectType({ description: 'Information about a user\'s session' })
+export class UserSession {
+  @Field()
+  id: number
+
+  @Field(type => User)
+  user: User
+  userId: number
+  
+  @Field({ nullable: true })
+  deviceType?: string
+  
+  @Field()
+  createdAt: number
+  
+  @Field()
+  expiresAt: number
+}
+
 @ArgsType()
 export class UsersArgs {
   @Field(type => [Int], { nullable: true })
@@ -47,6 +68,14 @@ export class SignUpArgs {
   password: string
 }
 
+@ArgsType()
+export class SignInArgs {
+  @Field()
+  email: string
+  @Field()
+  password: string
+}
+
 @Resolver()
 export class UserResolver {
   @Query(returns => [User])
@@ -58,6 +87,7 @@ export class UserResolver {
   async me(
     @Ctx() ctx: Context
   ): Promise<User> {
+    console.log('#### me: ', ctx.getSessionCookie())
     const users = await db.getUsers({ ids: [ctx.userId] })
     if (users.length < 1) throw new Error('User ID not found')
     if (users.length > 1) throw new Error('Got multiple users with the same ID')
@@ -67,5 +97,30 @@ export class UserResolver {
   @Mutation(returns => User)
   async signUp(@Args() signUpArgs: SignUpArgs) {
     return await db.createUser(signUpArgs)
+  }
+
+  @Mutation(returns => UserSession)
+  async signIn(
+    @Args() signInArgs: SignInArgs,
+    @Ctx() ctx: Context
+  ) {
+    const session = await db.createSession(signInArgs)
+    ctx.setSessionCookie(session.token)
+    return {
+      id: session.id,
+      userId: session.userId,
+      createdAt: session.createdAt,
+      expiresAt: session.expiresAt,
+      deviceType: session.deviceType
+    }
+  }
+}
+
+@Resolver(of => UserSession)
+export class UserSessionResolver implements ResolverInterface<UserSession> {
+  @FieldResolver(type => User)
+  async user(@Root() userSession: UserSession) {
+    const users = await db.getUsers({ ids: [userSession.userId] })
+    return users[0] ?? null
   }
 }
