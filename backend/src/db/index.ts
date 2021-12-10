@@ -19,7 +19,7 @@ const userTable: UserTableType[] = []
 const sessionTable: SessionTableType[] = []
 // MOCK END
 
-export async function createUser (user: SignUpArgs) {
+export async function createUser (user: SignUpArgs): Promise<User> {
   const passwordHash = await bcrypt.hash(user.password, config.password.saltRounds)
   const newUser = {
     id: newUserId++,
@@ -37,20 +37,21 @@ export async function createUser (user: SignUpArgs) {
   }
 }
 
-export async function getUsers (filter?: UsersArgs) {
-  if (filter && Object.keys(filter).length > 1) throw new Error('Only one filter allowed')
+export async function getUsers (filter?: UsersArgs): Promise<User[]> {
+  if (Object.keys(filter ?? {}).length > 1) throw new Error('Only one filter allowed')
 
   let users = userTable
-  if (filter?.ids) {
+  if (typeof filter?.ids !== 'undefined') {
     users = filter.ids.flatMap(id =>
       users.filter(user => user.id === id)
     )
-  } else if (filter?.emails) {
+  } else if (typeof filter?.emails !== 'undefined') {
     users = filter.emails.flatMap(email =>
       users.filter(user => user.email === email)
     )
-  } else if (filter?.name) {
-    users = users.filter(user => new RegExp(`${filter.name}`, 'i').test(user.name))
+  } else if (typeof filter?.name !== 'undefined') {
+    const filterName = filter.name // TS doesn't know that the arrow function below is only used here.
+    users = users.filter(user => new RegExp(`${filterName}`, 'i').test(user.name))
   }
 
   return users.map(user => ({
@@ -64,10 +65,10 @@ interface CreateSessionOptions {
   deviceType?: string
 }
 
-export async function createSession (user: SignInArgs, options?: CreateSessionOptions) {  
+export async function createSession (user: SignInArgs, options?: CreateSessionOptions): Promise<SessionTableType> {
   const currentUser = userTable.find(dbUser => dbUser.email === user.email)
 
-  if (!currentUser) throw new Error('Incorrect email or password')
+  if (typeof currentUser === 'undefined') throw new Error('Incorrect email or password')
   if (!(await bcrypt.compare(user.password, currentUser.passwordHash))) throw new Error('Incorrect email or password')
 
   const token = Math.random().toString(36).substr(2, 5)
