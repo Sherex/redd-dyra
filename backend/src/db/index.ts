@@ -1,13 +1,14 @@
 import bcrypt from 'bcrypt'
 import { config } from '../config'
 import { delay } from '../lib/utils'
-import { User, UsersArgs, SignUpArgs, SignInArgs, UserSession } from '../schema/user'
+import { User, UsersArgs, SignUpArgs, SignInArgs } from '../schema/user'
+import { Session } from '../schema/session'
 
 export interface UserTableType extends User {
   passwordHash: string
 }
 
-export interface SessionTableType extends Omit<UserSession, 'user'> {
+export interface SessionTableType extends Omit<Session, 'user'> {
   userId: number
   token: string
 }
@@ -86,4 +87,17 @@ export async function createSession (user: SignInArgs, options?: CreateSessionOp
   await delay(Math.random() * 300)
 
   return newSession
+}
+
+type GetSessionFilter = Partial<Pick<SessionTableType, 'id' | 'userId'>>
+
+export async function getSessions (filter: GetSessionFilter): Promise<SessionTableType[]> {
+  if (Object.keys(filter).length < 1) throw new Error('Please specify at least one filter')
+
+  const fitleredSessions = sessionTable.filter(session => (
+    session.id === filter.id ||
+    session.userId === filter.userId
+  ))
+
+  return fitleredSessions
 }

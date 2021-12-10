@@ -13,6 +13,7 @@ import {
 } from 'type-graphql'
 import * as db from '../db'
 import { Context } from '../schema/context'
+import { Session } from './session'
 
 @ObjectType({ description: 'Information about a user' })
 export class User {
@@ -25,24 +26,6 @@ export class User {
 
   @Field()
   name: string
-}
-
-@ObjectType({ description: 'Information about a user\'s session' })
-export class UserSession {
-  @Field()
-  id: number
-
-  @Field(type => User, { name: 'user' })
-  userId: number
-
-  @Field({ nullable: true })
-  deviceType?: string
-
-  @Field()
-  createdAt: number
-
-  @Field()
-  expiresAt: number
 }
 
 @ArgsType()
@@ -78,22 +61,26 @@ export class SignInArgs {
   password: string
 }
 
-@Resolver()
+@Resolver(of => User)
 export class UserResolver {
   @Query(returns => [User])
   async users (@Args() userArgs: UsersArgs): Promise<User[]> {
     return await db.getUsers(userArgs)
   }
 
-  @Query(returns => User)
+  @FieldResolver(type => [Session])
+  async sessions (@Root() user: User): Promise<Session[]> {
+    return await db.getSessions({ userId: user.id })
+  }
+
+  @Query(returns => User, { nullable: true })
   async me (
     @Ctx() ctx: Context
-  ): Promise<User> {
+  ): Promise<User | null> {
     console.log('#### me: ', ctx.getSessionCookie('session'))
     const users = await db.getUsers({ ids: [ctx.userId] })
-    if (users.length < 1) throw new Error('User ID not found')
     if (users.length > 1) throw new Error('Got multiple users with the same ID')
-    return users[0]
+    return users[0] ?? null
   }
 
   @Mutation(returns => User)
@@ -101,12 +88,11 @@ export class UserResolver {
     return await db.createUser(signUpArgs)
   }
 
-  @Mutation(returns => UserSession)
+  @Mutation(returns => Session)
   async signIn (
     @Args() signInArgs: SignInArgs,
-    // eslint-disable-next-line @typescript-eslint/indent
-    @Ctx() ctx: Context
-  ): Promise<UserSession> {
+    @Ctx() ctx: Context // eslint-disable-line @typescript-eslint/indent
+  ): Promise<Session> {
     const session = await db.createSession(signInArgs)
     ctx.setSessionCookie(session.token)
     return {
@@ -116,14 +102,5 @@ export class UserResolver {
       expiresAt: session.expiresAt,
       deviceType: session.deviceType
     }
-  }
-}
-
-@Resolver(of => UserSession)
-export class UserSessionResolver {
-  @FieldResolver(type => User)
-  async user (@Root() userSession: UserSession): Promise<User | null> {
-    const users = await db.getUsers({ ids: [userSession.userId] })
-    return users[0] ?? null
   }
 }

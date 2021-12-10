@@ -3,12 +3,12 @@ import { buildSchema } from 'type-graphql'
 import path from 'path'
 import { ApolloServer } from 'apollo-server'
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
-import { UserResolver, UserSessionResolver } from './schema/user'
+import { resolvers } from './schema'
 import { createContext } from './schema/context'
 
-(async () => {
+;(async () => {
   const schema = await buildSchema({
-    resolvers: [UserResolver, UserSessionResolver],
+    resolvers: resolvers,
     emitSchemaFile: path.resolve(__dirname, 'schema.gql')
   })
 
