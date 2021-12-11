@@ -13,8 +13,7 @@
     "dev": "ts-node src/",
     "lint": "eslint src/",
     "lint:fix": "eslint --fix src/",
-    "test": "npm run lint",
-    "prepare": "husky install"
+    "test": "npm run lint"
   },
   "keywords": [],
   "author": "Ingar Helgesen (https://github.com/Sherex)",
