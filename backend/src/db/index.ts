@@ -1,8 +1,23 @@
+import { knex as createKnex } from 'knex'
 import bcrypt from 'bcrypt'
+import knexConfig from '../knexfile'
 import { config } from '../config'
 import { delay } from '../lib/utils'
 import { User, UsersArgs, SignUpArgs, SignInArgs } from '../schema/user'
 import { Session } from '../schema/session'
+
+// KNEX TESTING
+const knex = createKnex(knexConfig)
+
+knex('user').insert({
+  email: '123',
+  name: '123',
+  invited_by_user_id: 123,
+  password_hash: '123'
+}).then(console.log).catch(console.error)
+
+knex('user').select('*').then(console.log).catch(console.error)
+// KNEX TESTING END
 
 export interface UserTableType extends User {
   passwordHash: string
