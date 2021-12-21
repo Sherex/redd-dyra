@@ -1,5 +1,12 @@
 // TODO: Configuration with env vars
 export const config = {
+  inDev: process.env.NODE_ENV !== 'production',
+  api: {
+    port: 4000
+  },
+  log: {
+    level: 'debug'
+  },
   password: {
     saltRounds: 10
   },

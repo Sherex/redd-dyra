@@ -7,8 +7,9 @@ import { dirname, resolve as pathResolve } from 'path'
 import { resolvers } from './schema/index.js'
 import { createContext } from './schema/context.js'
 import { logger } from './lib/logger.js'
+import { config } from './config.js'
 
-logger.info(`Starting backend in NODE_ENV: "${process.env.NODE_ENV ?? 'undefined'}"`)
+logger.info(`Starting backend in a ${config.inDev ? 'development' : 'production'} environment`)
 
 // Get the directory of this file (index.ts)
 const __filename = fileURLToPath(import.meta.url) // eslint-disable-line @typescript-eslint/naming-convention
@@ -22,10 +23,9 @@ const schema = await buildSchema({
 const server = new ApolloServer({
   schema,
   context: createContext,
-  plugins: [
-    ApolloServerPluginLandingPageGraphQLPlayground
-  ]
+  plugins: config.inDev ? [ApolloServerPluginLandingPageGraphQLPlayground] : undefined
 })
 
-const { url } = await server.listen(4000)
-logger.debug(`Server is running, GraphQL Playground available at ${url}`)
+const { url } = await server.listen(config.api.port)
+logger.info(`Backend API is running on ${url}`)
+if (config.inDev) logger.info(`GraphQL Playground is available at: ${url}`)
