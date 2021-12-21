@@ -1,23 +1,37 @@
 import type { Knex } from 'knex'
 
-type TemplateColumns = 'id' | 'created_at' | 'updated_at' | 'deleted_at'
+type TemplateColumns = 'id' | 'createdAt' | 'updatedAt'
 function tableTemplate (knex: Knex, table: Knex.TableBuilder, include?: TemplateColumns[]): void {
   if (include?.includes('id') ?? true) table.increments('id')
-  if (include?.includes('created_at') ?? true) table.timestamp('created_at').notNullable().defaultTo(knex.fn.now())
-  if (include?.includes('updated_at') ?? true) table.timestamp('updated_at').notNullable().defaultTo(knex.fn.now())
-  if (include?.includes('deleted_at') ?? true) table.timestamp('deleted_at') // TODO: Use history from pgMemento instead?
+  if (include?.includes('createdAt') ?? true) table.timestamp('createdAt').notNullable().defaultTo(knex.fn.now())
+  if (include?.includes('updatedAt') ?? true) table.timestamp('updatedAt').notNullable().defaultTo(knex.fn.now())
 }
 
 export async function up (knex: Knex): Promise<void> {
+  await knex.schema.raw('CREATE EXTENSION "uuid-ossp"')
+  await knex.schema.raw('CREATE EXTENSION pgmemento')
   await knex.schema.withSchema('public').createTable('user', table => {
     tableTemplate(knex, table)
+    table.timestamp('deletedAt')
     table.text('email').notNullable().unique()
-    table.text('password_hash').notNullable()
+    table.text('passwordHash').notNullable()
     table.text('name').notNullable()
-    table.text('invited_by_user_id').notNullable().references('id')
+    table.integer('invitedByUserId').notNullable().references('id').inTable('user')
+  })
+  await knex.schema.withSchema('public').createTable('user_session', table => {
+    tableTemplate(knex, table, ['id', 'createdAt'])
+    table.integer('expiresAfterSeconds').notNullable()
+    table.integer('invitedByUserId').notNullable().references('id').inTable('user')
+    table.uuid('token').notNullable().unique()
+    table.text('deviceType')
+  })
+  await knex.schema.withSchema('public').createTable('join_token', table => {
+    table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v1mc()'))
+    tableTemplate(knex, table, ['createdAt'])
+    table.integer('created_by_user_id').notNullable().references('id').inTable('user')
   })
 }
 
 export async function down (knex: Knex): Promise<void> {
-  await knex.schema.withSchema('public').dropTable('user')
+  await knex.schema.withSchema('public').dropTableIfExists('user')
 }

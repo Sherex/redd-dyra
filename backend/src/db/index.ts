@@ -17,8 +17,6 @@ const insertUser = await knex('user').insert({
 }).returning('*')
 
 console.log(insertUser)
-
-console.log(await knex('user').select('*'))
 // KNEX TESTING END
 
 export interface UserTableType extends User {
