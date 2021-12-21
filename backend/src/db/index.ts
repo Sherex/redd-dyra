@@ -10,7 +10,7 @@ import { Session } from '../schema/session.js'
 const knex = createKnex(knexConfig)
 
 const insertUser = await knex('user').insert({
-  email: '123',
+  email: (Math.random() * 10000 + 1).toFixed(0).toString(),
   name: '123',
   invitedByUserId: 123,
   passwordHash: '123'

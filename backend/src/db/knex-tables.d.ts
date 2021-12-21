@@ -1,34 +1,81 @@
 import type { Knex } from 'knex'
+import type * as DB from './db-tables.js'
 
 // https://knexjs.org/#typescript-support
 
 declare module 'knex/types/tables' {
-  type SnakeToCamel<S extends string> =
-    S extends `${infer T}_${infer U}`
-      ? `${T}${Capitalize<SnakeToCamel<U>>}`
-      : S
-
-  type ObjectSnakeToCamel<Type> = {
-    [Property in keyof Type as Property extends string ? SnakeToCamel<Property> : Property]: Type[Property]
-  }
-  interface User {
-    id: number
-    email: string
-    passwordHash: string
-    name: string
-    // If null; added by system
-    invitedByUserId: number | null
-    createdAt: string
-    updatedAt: string
-    deletedAt: string | null
-  }
-
+  type DefaultOmit = 'id' | 'createdAt' | 'updatedAt'
   interface Tables {
-    user: Knex.CompositeTableType<
+    address: Knex.CompositeTableType<
     // Base (Select, where, etc.)
-    User,
+    DB.Address,
     // Insert
-    Pick<User, 'name' | 'email' | 'invitedByUserId' | 'passwordHash'>
+    Omit<DB.Address, DefaultOmit>
+    >
+
+    cage: Knex.CompositeTableType<
+    DB.Cage,
+    Omit<DB.Cage, DefaultOmit>
+    >
+
+    captureCat: Knex.CompositeTableType<
+    DB.CaptureCat,
+    Omit<DB.CaptureCat, DefaultOmit>
+    >
+
+    captureLocation: Knex.CompositeTableType<
+    DB.CaptureLocation,
+    Omit<DB.CaptureLocation, DefaultOmit>
+    >
+
+    cat: Knex.CompositeTableType<
+    DB.Cat,
+    Omit<DB.Cat, DefaultOmit>
+    >
+
+    catStatistics: Knex.CompositeTableType<
+    DB.CatStatistics,
+    Omit<DB.CatStatistics, DefaultOmit>
+    >
+
+    dailyLog: Knex.CompositeTableType<
+    DB.DailyLog,
+    Omit<DB.DailyLog, DefaultOmit>
+    >
+
+    image: Knex.CompositeTableType<
+    DB.Image,
+    Omit<DB.Image, DefaultOmit>
+    >
+
+    joinToken: Knex.CompositeTableType<
+    DB.JoinToken,
+    Omit<DB.JoinToken, DefaultOmit>
+    >
+
+    location: Knex.CompositeTableType<
+    DB.Location,
+    Omit<DB.Location, DefaultOmit>
+    >
+
+    room: Knex.CompositeTableType<
+    DB.Room,
+    Omit<DB.Room, DefaultOmit>
+    >
+
+    trap: Knex.CompositeTableType<
+    DB.Trap,
+    Omit<DB.Trap, DefaultOmit>
+    >
+
+    user: Knex.CompositeTableType<
+    DB.User,
+    Omit<DB.User, DefaultOmit>
+    >
+
+    userSession: Knex.CompositeTableType<
+    DB.UserSession,
+    Omit<DB.UserSession, DefaultOmit>
     >
   }
 }
