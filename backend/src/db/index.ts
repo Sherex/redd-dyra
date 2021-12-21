@@ -9,14 +9,16 @@ import { Session } from '../schema/session.js'
 // KNEX TESTING
 const knex = createKnex(knexConfig)
 
-knex('user').insert({
+const insertUser = await knex('user').insert({
   email: '123',
   name: '123',
   invitedByUserId: 123,
   passwordHash: '123'
-}).returning('*').then(console.log).catch(console.error)
+}).returning('*')
 
-knex('user').select('*').then(console.log).catch(console.error)
+console.log(insertUser)
+
+console.log(await knex('user').select('*'))
 // KNEX TESTING END
 
 export interface UserTableType extends User {
