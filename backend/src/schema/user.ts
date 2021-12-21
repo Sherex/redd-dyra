@@ -14,6 +14,7 @@ import {
 import * as db from '../db/index.js'
 import { Context } from './context.js'
 import { Session } from './session.js'
+import { logger } from '../lib/logger.js'
 
 @ObjectType({ description: 'Information about a user' })
 export class User {
@@ -77,7 +78,7 @@ export class UserResolver {
   async me (
     @Ctx() ctx: Context
   ): Promise<User | null> {
-    console.log('#### me: ', ctx.getSessionCookie('session'))
+    logger.debug('#### me: ', ctx.getSessionCookie('session'))
     const users = await db.getUsers({ ids: [ctx.userId] })
     if (users.length > 1) throw new Error('Got multiple users with the same ID')
     return users[0] ?? null
