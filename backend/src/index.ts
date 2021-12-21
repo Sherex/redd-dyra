@@ -3,8 +3,8 @@ import { buildSchema } from 'type-graphql'
 import path from 'path'
 import { ApolloServer } from 'apollo-server'
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
-import { resolvers } from './schema'
-import { createContext } from './schema/context'
+import { resolvers } from './schema/index.js'
+import { createContext } from './schema/context.js'
 
 ;(async () => {
   const schema = await buildSchema({

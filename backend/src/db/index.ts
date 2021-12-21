@@ -1,10 +1,10 @@
-import { knex as createKnex } from 'knex'
+import createKnex from 'knex'
 import bcrypt from 'bcrypt'
-import knexConfig from '../knexfile'
-import { config } from '../config'
-import { delay } from '../lib/utils'
-import { User, UsersArgs, SignUpArgs, SignInArgs } from '../schema/user'
-import { Session } from '../schema/session'
+import knexConfig from '../knexfile.js'
+import { config } from '../config.js'
+import { delay } from '../lib/utils.js'
+import { User, UsersArgs, SignUpArgs, SignInArgs } from '../schema/user.js'
+import { Session } from '../schema/session.js'
 
 // KNEX TESTING
 const knex = createKnex(knexConfig)

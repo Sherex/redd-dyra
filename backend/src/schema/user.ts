@@ -11,9 +11,9 @@ import {
   Ctx,
   Int
 } from 'type-graphql'
-import * as db from '../db'
-import { Context } from '../schema/context'
-import { Session } from './session'
+import * as db from '../db/index.js'
+import { Context } from './context.js'
+import { Session } from './session.js'
 
 @ObjectType({ description: 'Information about a user' })
 export class User {

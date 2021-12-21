@@ -1,5 +1,5 @@
-import { UserResolver } from './user'
-import { SessionResolver } from './session'
+import { UserResolver } from './user.js'
+import { SessionResolver } from './session.js'
 
 export const resolvers = [
   UserResolver,
