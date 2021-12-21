@@ -23,10 +23,10 @@ export class Session {
   deviceType?: string
 
   @Field()
-  createdAt: number
+  createdAt: Date
 
   @Field()
-  expiresAt: number
+  expiresAfterSeconds: number
 }
 
 @Resolver(of => Session)

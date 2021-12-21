@@ -75,7 +75,7 @@ declare module 'knex/types/tables' {
 
     userSession: Knex.CompositeTableType<
     DB.UserSession,
-    Omit<DB.UserSession, DefaultOmit>
+    Omit<DB.UserSession, DefaultOmit | 'token'>
     >
   }
 }

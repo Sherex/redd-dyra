@@ -5,114 +5,99 @@ import { config } from '../config.js'
 import { delay } from '../lib/utils.js'
 import { User, UsersArgs, SignUpArgs, SignInArgs } from '../schema/user.js'
 import { Session } from '../schema/session.js'
+import { logger } from '../lib/logger.js'
 
-// KNEX TESTING
+// TODO: Try-catch all db queries and send less detailed error to GraphQL
+
 const knex = createKnex(knexConfig)
 
-const insertUser = await knex('user').insert({
-  email: (Math.random() * 10000 + 1).toFixed(0).toString(),
-  name: '123',
-  invitedByUserId: 123,
-  passwordHash: '123'
-}).returning('*')
-
-console.log(insertUser)
-// KNEX TESTING END
-
-export interface UserTableType extends User {
-  passwordHash: string
-}
-
-export interface SessionTableType extends Omit<Session, 'user'> {
-  userId: number
-  token: string
-}
-
-// DB TEMP MOCK
-let newUserId = 0
-let newUserSessionId = 0
-const userTable: UserTableType[] = []
-const sessionTable: SessionTableType[] = []
-// MOCK END
-
-export async function createUser (user: SignUpArgs): Promise<User> {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export async function createUser (user: SignUpArgs) {
   const passwordHash = await bcrypt.hash(user.password, config.password.saltRounds)
   const newUser = {
-    id: newUserId++,
     email: user.email,
     name: user.name,
     passwordHash
   }
 
-  userTable.push(newUser)
+  // TODO: Check for errors and length
+  const insertUserResult = await knex('user')
+    .insert(newUser)
+    .returning(['id', 'email', 'name'])
 
   return {
-    id: newUser.id,
-    email: newUser.email,
-    name: newUser.name
+    id: insertUserResult[0].id,
+    email: insertUserResult[0].email,
+    name: insertUserResult[0].name
   }
 }
 
-export async function getUsers (filter?: UsersArgs): Promise<User[]> {
-  if (Object.keys(filter ?? {}).length > 1) throw new Error('Only one filter allowed')
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export async function getUsers (filter?: UsersArgs) {
+  let getUserQuery = knex('user')
+    .select(['id', 'email', 'name', 'invitedByUserId', 'passwordHash', 'createdAt', 'updatedAt', 'deletedAt'])
 
-  let users = userTable
-  if (typeof filter?.ids !== 'undefined') {
-    users = filter.ids.flatMap(id =>
-      users.filter(user => user.id === id)
-    )
-  } else if (typeof filter?.emails !== 'undefined') {
-    users = filter.emails.flatMap(email =>
-      users.filter(user => user.email === email)
-    )
-  } else if (typeof filter?.name !== 'undefined') {
-    const filterName = filter.name // TS doesn't know that the arrow function below is only used here.
-    users = users.filter(user => new RegExp(`${filterName}`, 'i').test(user.name))
-  }
+  if (filter?.ids !== undefined) getUserQuery = getUserQuery.whereIn('id', filter.ids)
+  if (filter?.emails !== undefined) getUserQuery = getUserQuery.whereIn('email', filter.emails)
+  //                       TODO: Double check that this is sanitized VVV
+  if (filter?.name !== undefined) getUserQuery = getUserQuery.where('name', 'like', `%${filter.name}%`)
 
-  return users.map(user => ({
-    id: user.id,
-    email: user.email,
-    name: user.name
-  }))
+  const getUserResult = await getUserQuery
+
+  return getUserResult
 }
 
 interface CreateSessionOptions {
   deviceType?: string
 }
 
-export async function createSession (user: SignInArgs, options?: CreateSessionOptions): Promise<SessionTableType> {
-  const currentUser = userTable.find(dbUser => dbUser.email === user.email)
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export async function createSession (user: SignInArgs, options?: CreateSessionOptions) {
+  // TODO: Create getUser (singular) function
+  const returnedUsers = await getUsers({ emails: [user.email] })
 
-  if (typeof currentUser === 'undefined') throw new Error('Incorrect email or password')
+  if (returnedUsers.length === 0) throw new Error('Incorrect email or password')
+  const currentUser = returnedUsers[0]
+
   if (!(await bcrypt.compare(user.password, currentUser.passwordHash))) throw new Error('Incorrect email or password')
 
-  const token = Math.random().toString(36).substr(2, 5)
-
-  const newSession: SessionTableType = {
-    id: newUserSessionId++,
+  const newSession = {
     userId: currentUser.id,
-    createdAt: Date.now(),
-    expiresAt: Date.now() + 300,
-    deviceType: options?.deviceType,
-    token
+    expiresAfterSeconds: 300,
+    deviceType: options?.deviceType
   }
-  sessionTable.push(newSession)
+
+  const createSessionResult = await knex('userSession')
+    .insert(newSession)
+    .returning('*')
 
   await delay(Math.random() * 300)
 
-  return newSession
+  const createdSession = {
+    ...createSessionResult[0],
+    deviceType: createSessionResult[0].deviceType ?? undefined // TODO: Do this properly by correcting the type-graphql types
+  }
+
+  return createdSession
 }
 
-type GetSessionFilter = Partial<Pick<SessionTableType, 'id' | 'userId'>>
+// TODO: Use types from db-tables.d.ts
+type GetSessionFilter = Partial<Pick<Session, 'id' | 'userId'>>
 
-export async function getSessions (filter: GetSessionFilter): Promise<SessionTableType[]> {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export async function getSessions (filter: GetSessionFilter) {
   if (Object.keys(filter).length < 1) throw new Error('Please specify at least one filter')
 
-  const fitleredSessions = sessionTable.filter(session => (
-    session.id === filter.id ||
-    session.userId === filter.userId
-  ))
+  let getUserQuery = knex('userSession')
+    .select('*')
 
-  return fitleredSessions
+  if (typeof filter.id === 'number') getUserQuery = getUserQuery.where('id', '=', filter.id)
+  if (typeof filter.userId === 'number') getUserQuery = getUserQuery.where('userId', '=', filter.userId)
+
+  const getSessionsResult = await getUserQuery
+
+  return getSessionsResult.map(session => ({
+    ...session,
+    deviceType: session.deviceType ?? undefined // TODO: Do this properly by correcting the type-graphql types
+  }))
 }

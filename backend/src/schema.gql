@@ -3,6 +3,11 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
 type Mutation {
   signIn(email: String!, password: String!): Session!
   signUp(email: String!, name: String!, password: String!): User!
@@ -18,9 +23,9 @@ type Query {
 
 """Information about a user's session"""
 type Session {
-  createdAt: Float!
+  createdAt: DateTime!
   deviceType: String
-  expiresAt: Float!
+  expiresAfterSeconds: Float!
   id: Float!
   user: User!
 }

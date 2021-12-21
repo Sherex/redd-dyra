@@ -100,7 +100,7 @@ export class UserResolver {
       id: session.id,
       userId: session.userId,
       createdAt: session.createdAt,
-      expiresAt: session.expiresAt,
+      expiresAfterSeconds: session.expiresAfterSeconds,
       deviceType: session.deviceType
     }
   }
