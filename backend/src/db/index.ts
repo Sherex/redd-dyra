@@ -12,9 +12,9 @@ const knex = createKnex(knexConfig)
 knex('user').insert({
   email: '123',
   name: '123',
-  invited_by_user_id: 123,
-  password_hash: '123'
-}).then(console.log).catch(console.error)
+  invitedByUserId: 123,
+  passwordHash: '123'
+}).returning('*').then(console.log).catch(console.error)
 
 knex('user').select('*').then(console.log).catch(console.error)
 // KNEX TESTING END

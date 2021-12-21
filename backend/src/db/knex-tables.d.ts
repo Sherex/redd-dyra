@@ -14,13 +14,13 @@ declare module 'knex/types/tables' {
   interface User {
     id: number
     email: string
-    password_hash: string
+    passwordHash: string
     name: string
     // If null; added by system
-    invited_by_user_id: number | null
-    created_at: Date
-    updated_at: Date
-    deleted_at: Date | null
+    invitedByUserId: number | null
+    createdAt: string
+    updatedAt: string
+    deletedAt: string | null
   }
 
   interface Tables {
@@ -28,7 +28,7 @@ declare module 'knex/types/tables' {
     // Base (Select, where, etc.)
     User,
     // Insert
-    Pick<User, 'name' | 'email' | 'invited_by_user_id' | 'password_hash'>
+    Pick<User, 'name' | 'email' | 'invitedByUserId' | 'passwordHash'>
     >
   }
 }
