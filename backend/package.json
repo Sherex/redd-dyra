@@ -20,7 +20,7 @@
     "test": "npm run lint",
     "db:start": "docker-compose -f ../docker/docker-compose.yml up -d",
     "db:stop": "docker-compose -f ../docker/docker-compose.yml down -v",
-    "knex": "knex --knexfile src/knexfile.ts",
+    "knex": "npm run build && knex --knexfile dist/knexfile.js",
     "tool:fix-table-types": "eslint --fix src/db/db-tables.d.ts && node tools/fix-table-types.js"
   },
   "keywords": [],
