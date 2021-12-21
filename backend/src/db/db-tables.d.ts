@@ -2,8 +2,8 @@
 // A generic address table
 export interface Address {
   id?: number | null
-  createdAt: string
-  updatedAt: string
+  createdAt: Date
+  updatedAt: Date
   city: string
   zip: number
   address: string
@@ -14,8 +14,8 @@ export interface Address {
 export interface Cage {
   id?: number | null
   roomId: number
-  createdAt: string
-  updatedAt: string
+  createdAt: Date
+  updatedAt: Date
   // Usually a number
   name: string
   description?: string | null
@@ -24,8 +24,8 @@ export interface Cage {
 // Details about the capture of a cat
 export interface CaptureCat {
   id?: number | null
-  createdAt: string
-  updatedAt: string
+  createdAt: Date
+  updatedAt: Date
   captureLocationId: number
   catId: number
   usedTrapId: number
@@ -36,8 +36,8 @@ export interface CaptureCat {
 // Details about the capture location
 export interface CaptureLocation {
   id?: number | null
-  createdAt: string
-  updatedAt: string
+  createdAt: Date
+  updatedAt: Date
   addressId: number
   description?: string | null
   areaDescription?: string | null
@@ -45,8 +45,8 @@ export interface CaptureLocation {
 
 export interface Cat {
   id: number
-  createdAt: string
-  updatedAt: string
+  createdAt: Date
+  updatedAt: Date
   deletedAt?: string | null
   name: string
   chipId?: string | null
@@ -64,8 +64,8 @@ export interface Cat {
 // Statistics about a cat (food/drink amount, health, etc.)
 export interface CatStatistics {
   id?: number | null
-  createdAt: string
-  updatedAt: string
+  createdAt: Date
+  updatedAt: Date
   catId: number
   // Amount of water left (0-10)
   waterLeft?: number | null
@@ -82,8 +82,8 @@ export interface CatStatistics {
 // A log entry about the events of the day
 export interface DailyLog {
   id?: number | null
-  createdAt: string
-  updatedAt: string
+  createdAt: Date
+  updatedAt: Date
   updateByUserId: number
   locationId: number
   content?: string | null
@@ -95,8 +95,8 @@ export interface DailyLog {
 
 export interface Image {
   id?: number | null
-  createdAt: string
-  updatedAt: string
+  createdAt: Date
+  updatedAt: Date
   location: string
   // Array of cat_id
   catsInImage?: string | null
@@ -107,7 +107,7 @@ export interface JoinToken {
   id: string
   // User that created this join token
   createdByUserId: number
-  createdAt: string
+  createdAt: Date
 }
 
 export interface Location {
@@ -123,8 +123,8 @@ export interface Location {
 export interface Room {
   id?: number | null
   locationId: number
-  createdAt: string
-  updatedAt: string
+  createdAt: Date
+  updatedAt: Date
   name: string
   description?: string | null
 }
@@ -132,8 +132,8 @@ export interface Room {
 // Details about a trap
 export interface Trap {
   id?: number | null
-  createdAt: string
-  updatedAt: string
+  createdAt: Date
+  updatedAt: Date
   name: string
   usable: boolean
   conditionDescription?: string | null
@@ -148,8 +148,8 @@ export interface User {
   name: string
   // If null; added by system
   invitedByUserId?: number | null
-  createdAt: string
-  updatedAt: string
+  createdAt: Date
+  updatedAt: Date
   deletedAt?: string | null
 }
 
@@ -161,7 +161,7 @@ export interface UserSession {
   // The UUID v4 token
   token: string
   deviceType?: string | null
-  createdAt: string
+  createdAt: Date
   // Seconds until expiry from created_at
   expiresAfterSeconds: number
 }
