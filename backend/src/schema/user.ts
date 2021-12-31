@@ -79,10 +79,11 @@ export class UserResolver {
   async me (
     @Ctx() ctx: Context
   ): Promise<User | null> {
-    // TODO: Check session and get userid in createContext, not here
-    if (typeof ctx.cookies.session !== 'string') throw new UnauthorizedError()
+    if (ctx.userId === null) throw new UnauthorizedError()
+
     const users = await db.getUsers({ ids: [ctx.userId] })
-    if (users.length > 1) throw new Error('Got multiple users with the same ID')
+    if (users.length !== 1) throw new UnauthorizedError()
+
     return users[0] ?? null
   }
 

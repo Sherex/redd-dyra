@@ -75,6 +75,7 @@ export async function createSession (user: SignInArgs, options?: CreateSessionOp
 
   const createdSession = {
     ...createSessionResult[0],
+    token: `${createSessionResult[0].id}_${createSessionResult[0].token}`,
     deviceType: createSessionResult[0].deviceType ?? undefined // TODO: Do this properly by correcting the type-graphql types
   }
 
@@ -98,6 +99,27 @@ export async function getSessions (filter: GetSessionFilter) {
 
   return getSessionsResult.map(session => ({
     ...session,
+    token: `${session.id}_${session.token}`,
     deviceType: session.deviceType ?? undefined // TODO: Do this properly by correcting the type-graphql types
   }))
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export async function getSessionFromToken (cookieToken: string) {
+  const validFormat = /^\d+?_[a-z0-9-]+$/im.test(cookieToken)
+  logger.debug(`token format is ${validFormat ? 'valid' : 'invalid'}`)
+  if (!validFormat) return null // TODO: Throw auth/request error?
+
+  const [id, token] = cookieToken.split('_')
+  const getSessionResult = await knex('userSession')
+    .select('*')
+    .where('id', '=', id)
+    .andWhere('token', '=', token)
+
+  if (getSessionResult.length === 0) return null
+
+  return {
+    ...getSessionResult[0],
+    token: `${getSessionResult[0].id}_${getSessionResult[0].token}`
+  }
 }

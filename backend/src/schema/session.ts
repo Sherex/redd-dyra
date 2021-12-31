@@ -5,7 +5,8 @@ import {
   FieldResolver,
   Root,
   Query,
-  Ctx
+  Ctx,
+  UnauthorizedError
 } from 'type-graphql'
 import * as db from '../db/index.js'
 import { Context } from './context.js'
@@ -33,6 +34,8 @@ export class Session {
 export class SessionResolver {
   @Query(returns => Session, { nullable: true, description: 'The current session' })
   async session (@Ctx() ctx: Context): Promise<Session | null> {
+    if (ctx.sessionId === null) throw new UnauthorizedError()
+
     const sessions = await db.getSessions({
       id: ctx.sessionId
     })
