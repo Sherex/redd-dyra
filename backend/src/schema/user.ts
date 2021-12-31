@@ -9,7 +9,8 @@ import {
   ArgsType,
   Args,
   Ctx,
-  Int
+  Int,
+  UnauthorizedError
 } from 'type-graphql'
 import * as db from '../db/index.js'
 import { Context } from './context.js'
@@ -78,7 +79,8 @@ export class UserResolver {
   async me (
     @Ctx() ctx: Context
   ): Promise<User | null> {
-    logger.debug('#### me: ', ctx.getSessionCookie('session'))
+    // TODO: Check session and get userid in createContext, not here
+    if (typeof ctx.cookies.session !== 'string') throw new UnauthorizedError()
     const users = await db.getUsers({ ids: [ctx.userId] })
     if (users.length > 1) throw new Error('Got multiple users with the same ID')
     return users[0] ?? null
@@ -95,7 +97,7 @@ export class UserResolver {
     @Ctx() ctx: Context // eslint-disable-line @typescript-eslint/indent
   ): Promise<Session> {
     const session = await db.createSession(signInArgs)
-    ctx.setSessionCookie(session.token)
+    ctx.setCookie('session', session.token)
     return {
       id: session.id,
       userId: session.userId,

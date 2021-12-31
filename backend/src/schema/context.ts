@@ -1,22 +1,27 @@
+import cookie from 'cookie'
 import type { Request, Response } from 'express'
 
 interface ExpressContext {
   req: Request
   res: Response
 }
+interface Cookies {
+  session?: string
+}
 
 export interface Context {
   userId: number
   sessionId: number
-  setSessionCookie: (token: string) => void
-  getSessionCookie: (token: string) => string
+  setCookie: (name: keyof Cookies, value: string) => void
+  cookies: Cookies
 }
 
-export function createContext ({ req, res }: ExpressContext): Context {
+export async function createContext ({ req, res }: ExpressContext): Promise<Context> {
+  const cookies = cookie.parse(req.headers.cookie ?? '') as Cookies
   return {
     userId: 0,
     sessionId: 0,
-    setSessionCookie: (token: string) => { res.cookie('session-cookie', token, { httpOnly: true }) },
-    getSessionCookie: (): any => req.cookies?.session // BUG: Cookies are not saved in the browser
+    setCookie: (name, value) => { res.cookie(name, value, { httpOnly: true }) }, // TODO: Double-check cookie security
+    cookies
   }
 }
