@@ -2,7 +2,8 @@
 export const config = {
   inDev: process.env.NODE_ENV !== 'production',
   api: {
-    port: 4000
+    port: 4000,
+    path: '/graphql'
   },
   log: {
     level: 'debug'
