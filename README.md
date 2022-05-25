@@ -1,6 +1,9 @@
 # Redd Dyra App
 A web app for Redd Dyra Telemark which keeps track of all cats, tasks, daily logs, shifts and more.
 
+## Links
+[Figma Project](https://www.figma.com/file/VNyw6mfTnxLIoL2UCDEH4H/Redd-dyra)
+
 ## Development
 ```bash
 git clone https://github.com/Sherex/redd-dyra
