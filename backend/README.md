@@ -1,6 +1,10 @@
 # Redd-dyra Backend
 This contains a GraphQL API that talks with a PostgreSQL DB through some business logic.
 
+## DB ERD
+> The schema will be implemented as needed with Knex.js
+![DB-ERD](./assets/db-erd.png)
+
 ## Development
 ### Commands
 | Action | Command | Note |
