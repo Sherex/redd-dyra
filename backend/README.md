@@ -19,9 +19,9 @@ This contains a GraphQL API that talks with a PostgreSQL DB through some busines
 ### Knex.js
 - Adding a new table
   1. Add table to Vuerd [[Github](https://github.com/vuerd/vuerd/) | [VSCode Extension](https://marketplace.visualstudio.com/items?itemName=dineug.vuerd-vscode)]
-  2. Export all tables to [db-tables.d.ts](backend/src/db/db-tables.d.ts)
+  2. Export all tables to [db-tables.d.ts](src/db/db-tables.d.ts)
   3. Run `npm run tool:fix-table-types`
-  4. Assign the type to the tables interface in [knex-tables.d.ts](backend/src/db/knex-tables.d.ts)
+  4. Assign the type to the tables interface in [knex-tables.d.ts](src/db/knex-tables.d.ts)
     ```ts
     interface Tables {
       ...
